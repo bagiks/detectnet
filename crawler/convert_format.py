@@ -100,9 +100,8 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
 
                 image_file = OUTPUT_LOCATION + "/" + type + "/images/" + str(photo_id) + ".jpg"
 
-                # image = Image.open(BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg")
+                image = Image.open(BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg")
 
-                # if image.size[0] < 2000 and image.size[1] < 1000:
                 f = open(annotation_file, "a+")
                 f.write(output_data)
                 f.close()
