@@ -147,6 +147,7 @@ def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
                     else:
                         category_mapping[category] = category_id_idx
                         category_id = category_id_idx
+                        category_id_idx += 1
 
                     print filename
                     print category
