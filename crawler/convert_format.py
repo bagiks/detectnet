@@ -165,6 +165,7 @@ def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
                                                    OUTPUT_LOCATION))
                         threads.append(t)
 
+    create_folder_if_not_exist(OUTPUT_LOCATION + "/" + "voc.names")
     f = open(OUTPUT_LOCATION + "/" + "voc.names", "w")
 
     for category in category_list:
