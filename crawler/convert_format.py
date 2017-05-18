@@ -113,7 +113,7 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
 
                 lock.acquire()
                 f = open(OUTPUT_LOCATION + "/" + type + ".txt", "a+")
-                f.write(image_file)
+                f.write(image_file + "\n")
                 f.close()
                 lock.release()
 
