@@ -71,9 +71,6 @@ def process_kitti_file(file_name, category_id, category, type, num, OUTPUT_LOCAT
                 traceback.print_exc(e)
 
 
-lock = threading.Lock()
-
-
 def process_yolo_file(file_name, category_id, category, type, num, OUTPUT_LOCATION):
     count = 0
     with open(file_name) as meta_file:
