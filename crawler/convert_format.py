@@ -163,7 +163,7 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                 tmp.save(annotation_file)
 
                 lock.acquire()
-
+                create_folder_if_not_exist(OUTPUT_LOCATION + "/" + "ImageSets/Main/train" + ".txt")
                 f = open(OUTPUT_LOCATION + "/" + "ImageSets/Main/train" + ".txt", "a+")
                 f.write(image_file + "\n")
                 f.close()
