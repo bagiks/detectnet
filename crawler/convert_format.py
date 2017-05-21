@@ -155,7 +155,7 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                                       file_name)
                 tmp.addBndBox(left, top, left + width, top + height, category)
 
-                annotation_file = "data/Annotations/" + str(photo_id) + ".xml"
+                annotation_file = OUTPUT_LOCATION + "/" + "Annotations/" + str(photo_id) + ".xml"
                 create_folder_if_not_exist(annotation_file)
                 tmp.save(annotation_file)
 
