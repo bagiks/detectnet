@@ -1,4 +1,5 @@
 import json
+from pascal_voc_io import PascalVocWriter
 import os
 import re
 import threading
@@ -72,7 +73,8 @@ def process_kitti_file(file_name, category_id, category, type, num, OUTPUT_LOCAT
 
 lock = threading.Lock()
 
-def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATION):
+
+def process_yolo_file(file_name, category_id, category, type, num, OUTPUT_LOCATION):
     count = 0
     with open(file_name) as meta_file:
         meta_obj_list = json.load(meta_file)
@@ -123,6 +125,57 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                 traceback.print_exc(e)
 
 
+def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATION):
+    count = 0
+    with open(file_name) as meta_file:
+        meta_obj_list = json.load(meta_file)
+
+        for meta_obj in meta_obj_list:
+            if count >= num:
+                break
+            else:
+                print count
+            type = "val" if type == "test" else type
+            try:
+                photo_id = meta_obj["photo"]
+
+                bbox = meta_obj["bbox"]
+                width = bbox["width"]
+                top = bbox["top"]
+                left = bbox["left"]
+                height = bbox["height"]
+
+                image_file = OUTPUT_LOCATION + "/" + "/JPEGImages/" + str(photo_id) + ".jpg"
+
+                image = Image.open(BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg")
+
+                create_folder_if_not_exist(image_file)
+                p = Popen(
+                    ['cp', BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg", image_file])
+                p.wait()
+
+                tmp = PascalVocWriter('train', str(photo_id), (image.size[0], image.size[1], 3), "street2photo",
+                                      file_name)
+                tmp.addBndBox(left, top, left + width, top + height, category)
+
+                annotation_file = "data/Annotations/" + str(photo_id) + ".xml"
+                create_folder_if_not_exist(annotation_file)
+                tmp.save(annotation_file)
+
+                lock.acquire()
+
+                f = open(OUTPUT_LOCATION + "/" + "ImageSets/Main/train" + ".txt", "a+")
+                f.write(image_file + "\n")
+                f.close()
+                lock.release()
+
+                count += 1
+            except Exception, e:
+                import traceback
+
+                traceback.print_exc(e)
+
+
 # count += 1
 
 def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
@@ -160,6 +213,11 @@ def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
                         threads.append(t)
                     elif output_format_type == "voc":
                         t = threading.Thread(target=process_voc_file,
+                                             args=("meta/json/" + filename, category_id, category, data_type, num,
+                                                   OUTPUT_LOCATION))
+                        threads.append(t)
+                    elif output_format_type == "yolo":
+                        t = threading.Thread(target=process_yolo_file,
                                              args=("meta/json/" + filename, category_id, category, data_type, num,
                                                    OUTPUT_LOCATION))
                         threads.append(t)
