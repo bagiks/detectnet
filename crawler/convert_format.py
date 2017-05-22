@@ -178,7 +178,7 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
 
 def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
     category_mapping = {}
-    category_list = []
+    category_set = set()
     category_id_idx = 0
     threads = []
 
@@ -202,7 +202,7 @@ def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
                     print filename
                     print category
 
-                    category_list.append(category)
+                    category_set.add(category)
 
                     if output_format_type == "kitti":
                         t = threading.Thread(target=process_kitti_file,
@@ -223,7 +223,7 @@ def main(train_num, test_num, OUTPUT_LOCATION, output_format_type):
     create_folder_if_not_exist(OUTPUT_LOCATION + "/" + "voc.names")
     f = open(OUTPUT_LOCATION + "/" + "voc.names", "w")
 
-    for category in category_list:
+    for category in category_set:
         f.write(category + "\n")
     f.close()
 
