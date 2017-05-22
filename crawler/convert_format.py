@@ -142,13 +142,13 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                 left = bbox["left"]
                 height = bbox["height"]
 
-                image_file = OUTPUT_LOCATION + "/" + "/JPEGImages/" + str(photo_id) + ".jpg"
+                image_file = OUTPUT_LOCATION + "/JPEGImages/" + str(photo_id)
 
                 image = Image.open(BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg")
 
-                create_folder_if_not_exist(image_file)
+                create_folder_if_not_exist(image_file + ".jpg")
                 p = Popen(
-                    ['cp', BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg", image_file])
+                    ['cp', BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg", image_file + ".jpg"])
                 p.wait()
 
                 tmp = PascalVocWriter('train', str(photo_id), (image.size[0], image.size[1], 3), "street2photo",
