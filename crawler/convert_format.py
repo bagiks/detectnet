@@ -132,7 +132,7 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                 break
             else:
                 print count
-            type = "val" if type == "test" else type
+            # type = "val" if type == "test" else type
             try:
                 photo_id = meta_obj["photo"]
 
@@ -151,7 +151,7 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                     ['cp', BASE_IMAGE_LOCATION + "/" + str(photo_id) + ".jpg", image_file + ".jpg"])
                 p.wait()
 
-                tmp = PascalVocWriter('train', str(photo_id), (image.size[0], image.size[1], 3), "street2photo",
+                tmp = PascalVocWriter('train', str(photo_id) + ".jpg", (image.size[0], image.size[1], 3), "street2photo",
                                       file_name)
                 tmp.addBndBox(left, top, left + width, top + height, category)
 
@@ -159,10 +159,10 @@ def process_voc_file(file_name, category_id, category, type, num, OUTPUT_LOCATIO
                 create_folder_if_not_exist(annotation_file)
                 tmp.save(annotation_file)
 
-                create_folder_if_not_exist(OUTPUT_LOCATION + "/" + "ImageSets/Main/train" + ".txt")
+                create_folder_if_not_exist(OUTPUT_LOCATION + "/" + "ImageSets/Main/" + type + ".txt")
                 lock.acquire()
 
-                f = open(OUTPUT_LOCATION + "/" + "ImageSets/Main/train" + ".txt", "a+")
+                f = open(OUTPUT_LOCATION + "/" + "ImageSets/Main/" + type + ".txt", "a+")
                 f.write(image_file + "\n")
                 f.close()
                 lock.release()
